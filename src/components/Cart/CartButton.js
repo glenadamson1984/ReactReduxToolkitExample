@@ -5,8 +5,6 @@ import { uiActions } from "../../store/ui-slice";
 const CartButton = (props) => {
   const dispatch = useDispatch();
   const toggleCartHandler = () => {
-    console.log("clicked");
-    console.log(uiActions);
     dispatch(uiActions.toggle());
   };
 

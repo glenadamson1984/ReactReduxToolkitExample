@@ -6,6 +6,7 @@ import Products from "./components/Shop/Products";
 import { useEffect } from "react";
 import { uiActions } from "./store/ui-slice";
 import Notification from "./components/UI/Notification";
+import { sendCartData } from "./store/cart-slice";
 
 let isIniital = true;
 
@@ -17,51 +18,12 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const sendCartData = async () => {
-      dispatch(
-        uiActions.showNotification({
-          status: "pending",
-          title: "Sending...",
-          message: "Sending Cart Data",
-        })
-      );
-      const response = await fetch(
-        "https://http-request-c835b-default-rtdb.firebaseio.com/cart.json",
-        {
-          method: "PUT",
-          body: JSON.stringify(cart),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("response not opk");
-      }
-
-      dispatch(
-        uiActions.showNotification({
-          status: "success",
-          title: "Success",
-          message: "Sending Cart Data Success",
-        })
-      );
-
-      const responseData = await response.json();
-    };
-
     if (isIniital) {
       isIniital = false;
       return;
     }
 
-    sendCartData().catch((error) => {
-      dispatch(
-        uiActions.showNotification({
-          status: "error",
-          title: "Error",
-          message: error,
-        })
-      );
-    });
+    dispatch(sendCartData(cart));
   }, [cart, dispatch]);
 
   return (
